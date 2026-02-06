@@ -283,7 +283,7 @@ document.getElementById("r_pdf").addEventListener("click", async () => {
     blob
   });
 
-  window.location.assign('/data.html')
+  window.location.assign(' https://gjoshi99.github.io/offert/data.html')
 });
 
 // Offer PDF
@@ -355,5 +355,5 @@ document.getElementById("o_pdf").addEventListener("click", async() => {
     blob
   });
 
-  window.location.assign('/data.html')
+    window.location.assign(' https://gjoshi99.github.io/offert/data.html')
 });
