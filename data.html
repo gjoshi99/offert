@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --border: rgba(255,255,255,.14);
+      --radius: 18px;
+      --danger: #ef4444;
+    }
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(56,189,248,.20), transparent 60%),
+        radial-gradient(900px 700px at 90% 25%, rgba(167,139,250,.16), transparent 55%),
+        radial-gradient(900px 700px at 55% 95%, rgba(34,197,94,.14), transparent 55%),
+        linear-gradient(180deg, #070b14 0%, #0b1220 100%);
+      min-height:100vh;
+    }
+
+    /* NAVBAR */
+    .navbar{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: rgba(7,11,20,.65);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      width: min(1100px, 96vw);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 14px 0;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: .3px;
+      font-size: 16px;
+    }
+    .nav-links{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .nav-links a{
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 750;
+      transition:.15s ease;
+      white-space: nowrap;
+    }
+    .nav-links a:hover{
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.22);
+    }
+
+    .wrap{
+      width:min(1100px, 96vw);
+      margin: 0 auto;
+      padding: 22px 0;
+    }
+
+    h1{ margin:0 0 14px; font-size: 26px; letter-spacing:-.2px; }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      margin-bottom: 14px;
+    }
+
+    .field label{
+      display:block;
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    input, select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      outline:none;
+      font-size: 14px;
+    }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+    .btn:hover{ background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.22); }
+    .btn-danger{
+      border: 1px solid rgba(239,68,68,.35);
+      background: rgba(239,68,68,.14);
+    }
+
+    .meta{
+      color: var(--muted);
+      font-size: 13px;
+      margin: 10px 2px 14px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .card-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+
+    .title{
+      font-weight: 900;
+      margin:0;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .sub{
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .tag{
+      display:inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 6px;
+      width: fit-content;
+      opacity: .9;
+    }
+
+    .frame{
+      width:100%;
+      height:420px;
+      border:0;
+      background: rgba(0,0,0,.18);
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      flex-wrap: wrap;
+    }
+    .actions .btn{ flex: 1; min-width: 130px; }
+
+    .empty{
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px dashed rgba(255,255,255,.20);
+      color: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.04);
+    }
+
+    @media (max-width: 950px){
+      .controls{ grid-template-columns: 1fr 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .frame{ height:520px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="nav-inner">
+      <div class="brand">Skapa Offert</div>
+      <div class="nav-links">
+        <!-- Change href if your main page has another path -->
+        <a href="/index.html">← Back</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Data</h1>
+
+    <div class="controls">
+      <div class="field">
+        <label>Search (name / title)</label>
+        <input id="q" placeholder="Offert 1001, Kund AB, Shpat AB..." />
+      </div>
+
+      <div class="field">
+        <label>From date</label>
+        <input id="from" type="date" />
+      </div>
+
+      <div class="field">
+        <label>To date</label>
+        <input id="to" type="date" />
+      </div>
+
+      <div class="field">
+        <label>Sort</label>
+        <select id="sort">
+          <option value="newest" selected>Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="title_asc">Title A → Z</option>
+          <option value="title_desc">Title Z → A</option>
+          <option value="type_asc">Type A → Z</option>
+          <option value="type_desc">Type Z → A</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Type</label>
+        <select id="type">
+          <option value="all" selected>All</option>
+          <option value="receipt">receipt</option>
+          <option value="offer">offer</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn" id="clear">Clear filters</button>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div id="count">Loading...</div>
+      <div style="opacity:.8;">Open/Download use a blob URL. Delete removes from IndexedDB.</div>
+    </div>
+
+    <div id="list" class="grid"></div>
+  </div>
+
+  <script>
+    // ============================
+    // IndexedDB (must match your saving code)
+    // ============================
+    const DB_NAME = "skapa-offert-db";
+    const DB_VERSION = 1;
+    const STORE_NAME = "pdfs";
+
+    function openPdfDb() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
+            store.createIndex("by_type", "type", { unique: false });
+            store.createIndex("by_createdAt", "createdAt", { unique: false });
+          }
+        };
+
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function getAllPdfRecords() {
+      const db = await openPdfDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const req = tx.objectStore(STORE_NAME).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function deletePdfRecord(id) {
+      const db = await openPdfDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+        tx.objectStore(STORE_NAME).delete(id);
+      });
+    }
+
+    // ============================
+    // UI
+    // ============================
+    const els = {
+      q: document.getElementById("q"),
+      from: document.getElementById("from"),
+      to: document.getElementById("to"),
+      sort: document.getElementById("sort"),
+      type: document.getElementById("type"),
+      clear: document.getElementById("clear"),
+      list: document.getElementById("list"),
+      count: document.getElementById("count"),
+    };
+
+    let all = [];
+
+    function norm(s){ return String(s || "").toLowerCase().trim(); }
+
+    function toDayStartTs(dateStr) {
+      if (!dateStr) return null;
+      return new Date(dateStr + "T00:00:00").getTime();
+    }
+    function toDayEndTs(dateStr) {
+      if (!dateStr) return null;
+      return new Date(dateStr + "T23:59:59.999").getTime();
+    }
+
+    function fmtDate(ts){
+      const d = new Date(ts);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mi = String(d.getMinutes()).padStart(2,"0");
+      return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function applyFilters(items){
+      const q = norm(els.q.value);
+      const fromTs = toDayStartTs(els.from.value);
+      const toTs = toDayEndTs(els.to.value);
+      const type = els.type.value;
+
+      return items.filter(it => {
+        if (type !== "all" && it.type !== type) return false;
+
+        const createdAt = Number(it.createdAt || 0);
+        if (fromTs !== null && createdAt < fromTs) return false;
+        if (toTs !== null && createdAt > toTs) return false;
+
+        if (q) {
+          const hay = norm([
+            it.title,
+            it.fileName,
+            it.type,
+            it?.meta?.store,
+            it?.meta?.company,
+            it?.meta?.customer,
+            it?.meta?.no
+          ].filter(Boolean).join(" "));
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function applySort(items){
+      const mode = els.sort.value;
+      const copy = [...items];
+
+      if (mode === "newest") copy.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      if (mode === "oldest") copy.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+
+      if (mode === "title_asc") copy.sort((a,b) => norm(a.title).localeCompare(norm(b.title)));
+      if (mode === "title_desc") copy.sort((a,b) => norm(b.title).localeCompare(norm(a.title)));
+
+      if (mode === "type_asc") copy.sort((a,b) => norm(a.type).localeCompare(norm(b.type)));
+      if (mode === "type_desc") copy.sort((a,b) => norm(b.type).localeCompare(norm(a.type)));
+
+      return copy;
+    }
+
+    function makeCard(item){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      // blob URL for iframe preview
+      const url = URL.createObjectURL(item.blob);
+
+      const title = item.title || item.fileName || "PDF";
+      const created = fmtDate(item.createdAt || Date.now());
+
+      const head = document.createElement("div");
+      head.className = "card-head";
+      head.innerHTML = `
+        <div>
+          <p class="title">${escapeHtml(title)}</p>
+          <p class="sub">${escapeHtml(created)}</p>
+          <div class="tag">${escapeHtml(item.type || "pdf")}</div>
+        </div>
+      `;
+
+      const iframe = document.createElement("iframe");
+      iframe.className = "frame";
+      iframe.src = url;
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const openBtn = document.createElement("button");
+      openBtn.className = "btn";
+      openBtn.textContent = "Open";
+      openBtn.onclick = () => window.open(url, "_blank");
+
+      const dlBtn = document.createElement("button");
+      dlBtn.className = "btn";
+      dlBtn.textContent = "Download";
+      dlBtn.onclick = () => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = item.fileName || "document.pdf";
+        a.click();
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "btn btn-danger";
+      delBtn.textContent = "Delete";
+      delBtn.onclick = async () => {
+        const ok = confirm("Delete this PDF permanently from IndexedDB?");
+        if (!ok) return;
+
+        await deletePdfRecord(item.id);
+
+        // remove from memory + cleanup blob url + re-render
+        try { URL.revokeObjectURL(url); } catch {}
+        all = all.filter(x => x.id !== item.id);
+        render();
+      };
+
+      actions.append(openBtn, dlBtn, delBtn);
+      card.append(head, iframe, actions);
+
+      // optional cleanup if browser removes node
+      card._blobUrl = url;
+
+      return card;
+    }
+
+    function cleanupBlobUrls() {
+      // revoke any previously created blob URLs to avoid memory growth on re-render
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(c => {
+        if (c._blobUrl) {
+          try { URL.revokeObjectURL(c._blobUrl); } catch {}
+        }
+      });
+    }
+
+    function render(){
+      cleanupBlobUrls();
+
+      const filtered = applySort(applyFilters(all));
+      els.count.textContent = `Showing ${filtered.length} of ${all.length}`;
+
+      els.list.innerHTML = "";
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No saved PDFs match your filters.";
+        els.list.appendChild(empty);
+        return;
+      }
+
+      for (const item of filtered) {
+        els.list.appendChild(makeCard(item));
+      }
+    }
+
+    async function init(){
+      all = await getAllPdfRecords();
+      // newest first by default
+      all.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      render();
+    }
+
+    // re-render on filter/sort changes
+    ["input", "change"].forEach(evt => {
+      els.q.addEventListener(evt, render);
+      els.from.addEventListener(evt, render);
+      els.to.addEventListener(evt, render);
+      els.sort.addEventListener(evt, render);
+      els.type.addEventListener(evt, render);
+    });
+
+    els.clear.addEventListener("click", () => {
+      els.q.value = "";
+      els.from.value = "";
+      els.to.value = "";
+      els.sort.value = "newest";
+      els.type.value = "all";
+      render();
+    });
+
+    init();
+  </script>
+</body>
+</html>
